@@ -1,0 +1,17 @@
+{% extends 'staticpatchcore/base.html' %}
+
+{% block title %}Edit Alternative Domain {{ alternative_domain.domain }} for {{ site.slug }} - StaticPatch{% endblock %}
+
+{% block content %}
+    <h1>Edit Alternative Domain {{ alternative_domain.domain }} for {{ site.slug }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <p>
+            <input type="submit" value="Save">
+            <a href="{% url 'admin_site_detail' site.slug %}" class="button">Cancel</a>
+        </p>
+    </form>
+{% endblock %} 

@@ -1,0 +1,26 @@
+{% extends 'staticpatchcore/base.html' %}
+
+{% block title %}Sites - StaticPatch{% endblock %}
+
+{% block content %}
+    <h1>Sites</h1>
+    <p><a href="{% url 'admin_site_new' %}" class="button">➕ Create New Site</a></p>
+    <table>
+        <thead>
+            <tr>
+                <th>Slug</th>
+                <th>Main Domain</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for site in sites %}
+            <tr>
+                <td><a href="{% url 'admin_site_detail' site.slug %}">{{ site.slug }}</a></td>
+                <td>{{ site.main_domain|default:"-" }}</td>
+                <td>{{ site.active|yesno:"Yes,No" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %} 

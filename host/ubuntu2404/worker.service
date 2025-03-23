@@ -1,0 +1,10 @@
+[Unit]
+Description=Staticpatch Worker
+
+[Service]
+ExecStart=/home/staticpatch/run_worker.sh
+User=staticpatch
+Group=staticpatch
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+{% extends 'staticpatchcore/base.html' %}
+
+{% block title %}New Basic Auth User - {{ site.slug }} - StaticPatch{% endblock %}
+
+{% block content %}
+    <h1>New Basic Auth User - {{ site.slug }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Basic Auth User</button>
+    </form>
+    <p><a href="{% url 'admin_site_detail' site.slug %}">Back to Site</a></p>
+{% endblock %} 

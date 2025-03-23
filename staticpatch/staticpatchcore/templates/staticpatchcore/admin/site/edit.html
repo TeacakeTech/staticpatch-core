@@ -1,0 +1,18 @@
+{% extends 'staticpatchcore/base.html' %}
+
+{% block title %}Edit Site: {{ site.slug }} - StaticPatch{% endblock %}
+
+{% block content %}
+    <h1>Edit Site: {{ site.slug }}</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <div class="form-actions">
+            <button type="submit" class="button">Save Changes</button>
+            <a href="{% url 'admin_site_detail' site.slug %}" class="button">Cancel</a>
+        </div>
+    </form>
+{% endblock %} 

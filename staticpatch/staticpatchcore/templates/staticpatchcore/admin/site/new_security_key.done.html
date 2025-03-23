@@ -1,0 +1,11 @@
+{% extends 'staticpatchcore/base.html' %}
+
+{% block title %}New Security Key for {{ site.slug }} - StaticPatch{% endblock %}
+
+{% block content %}
+    <h1>New Security Key for {{ site.slug }}</h1>
+    <p>Your security key is:</p>
+    <p><code>{{ security_key.key }}</code></p>
+    <p>Please save this key in a secure location. It will not be shown again.</p>
+    <p><a href="{% url 'admin_site_detail' site.slug %}" class="button">Done</a></p>
+{% endblock %} 

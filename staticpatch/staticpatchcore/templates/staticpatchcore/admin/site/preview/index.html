@@ -1,0 +1,73 @@
+{% extends 'staticpatchcore/base.html' %}
+
+{% block title %}Preview Type {{ preview_type.slug }} for {{ site.slug }} - StaticPatch{% endblock %}
+
+{% block content %}
+    <h1>Preview Type {{ preview_type.slug }} for {{ site.slug }}</h1>
+    
+    <div class="preview-type-details">
+        <h2>Preview Type Details</h2>
+        <table>
+            <tr>
+                <th>Slug:</th>
+                <td>{{ preview_type.slug }}</td>
+            </tr>
+            <tr>
+                <th>Domain:</th>
+                <td>{{ preview_type.domain }}</td>
+            </tr>
+            <tr>
+                <th>Domain SSL:</th>
+                <td>{{ preview_type.domain_ssl|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Basic Auth Required:</th>
+                <td>{{ preview_type.basic_auth_user_required|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Active:</th>
+                <td>{{ preview_type.active|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Created:</th>
+                <td>{{ preview_type.created_at|date:"Y-m-d H:i:s" }}</td>
+            </tr>
+            {% if preview_type.notes %}
+            <tr>
+                <th>Notes:</th>
+                <td>{{ preview_type.notes }}</td>
+            </tr>
+            {% endif %}
+        </table>
+
+        <a href="{% url 'admin_site_preview_type_edit' site_slug=site.slug preview_type_slug=preview_type.slug %}" class="btn btn-primary btn-sm">Edit</a>
+    </div>
+
+    <div class="preview-instances">
+        <h2>Preview Instances</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Active</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for instance in preview_instances %}
+                <tr>
+                    <td>{{ instance.slug }}</td>
+                    <td>{{ instance.active|yesno:"Yes,No" }}</td>
+                    <td>{{ instance.created_at|date:"Y-m-d H:i:s" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No preview instances found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <p><a href="{% url 'admin_site_detail' site.slug %}" class="button">Back to Site</a></p>
+{% endblock %} 

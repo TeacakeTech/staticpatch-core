@@ -1,0 +1,30 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+# gunicorn can let systemd know when it is ready
+Type=notify
+NotifyAccess=main
+# the specific user that our service will run as
+User=staticpatch
+Group=staticpatch
+RuntimeDirectory=gunicorn
+WorkingDirectory=/home/staticpatch/code/staticpatch
+ExecStart=/home/staticpatch/ve/bin/gunicorn --bind 127.0.0.1:8080 staticpatch.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+# if your app does not need administrative capabilities, let systemd know
+# ProtectSystem=strict
+EnvironmentFile=/home/staticpatch/env_vars
+PassEnvironment=STATICPATCH_FILE_STORAGE
+PassEnvironment=STATICPATCH_CERTBOT_EMAIL
+PassEnvironment=STATICPATCH_DEBUG
+PassEnvironment=STATICPATCH_ALLOWED_HOSTS
+PassEnvironment=STATICPATCH_SECRET_KEY
+PassEnvironment=STATICPATCH_STATIC_ROOT
+
+[Install]
+WantedBy=multi-user.target

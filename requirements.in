@@ -1,0 +1,4 @@
+django>=5,<6
+django-environ
+git+https://github.com/realOrangeOne/django-tasks@02742634a1d09d1f28b6308315ce3865f9db456a
+gunicorn

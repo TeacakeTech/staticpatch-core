@@ -1,0 +1,171 @@
+{% extends 'staticpatchcore/base.html' %}
+
+{% block title %}Site: {{ site.slug }} - StaticPatch{% endblock %}
+
+{% block content %}
+    <h1>Site: {{ site.slug }}</h1>
+    <p><a href="{% url 'admin_site_edit' site.slug %}" class="button">✏️ Edit Site</a></p>
+    <div class="site-details">
+        <table>
+            <tr>
+                <th>Slug:</th>
+                <td>{{ site.slug }}</td>
+            </tr>
+            <tr>
+                <th>Main Domain:</th>
+                <td>{{ site.main_domain|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>Main Domain SSL:</th>
+                <td>{{ site.main_domain_ssl|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Basic Auth Required:</th>
+                <td>{{ site.basic_auth_user_required|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Allow Override:</th>
+                <td>{{ site.allow_override|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Access File Name:</th>
+                <td>{{ site.access_file_name }}</td>
+            </tr>
+            <tr>
+                <th>Active:</th>
+                <td>{{ site.active|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Notes:</th>
+                <td>{{ site.notes }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>Alternative Domains</h2>
+    <div class="alternative-domains">
+        <p><a href="{% url 'admin_site_new_alternative_domain' site.slug %}" class="button">➕ Add Alternative Domain</a></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Domain</th>
+                    <th>SSL</th>
+                    <th>Active</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for domain in alternative_domains %}
+                <tr>
+                    <td>{{ domain.domain }}</td>
+                    <td>{{ domain.domain_ssl|yesno:"Yes,No" }}</td>
+                    <td>{{ domain.active|yesno:"Yes,No" }}</td>
+                    <td>{{ domain.notes }}</td>
+                    <td><a href="{% url 'admin_site_edit_alternative_domain' site.slug domain.id %}" class="button">✏️ Edit</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No alternative domains found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Preview Types</h2>
+    <div class="preview-types">
+        <p><a href="{% url 'admin_site_new_preview_type' site.slug %}" class="button">➕ Create New Preview Type</a></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Domain</th>
+                    <th>Domain SSL</th>
+                    <th>Basic Auth Required</th>
+                    <th>Active</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for preview_type in preview_types %}
+                <tr>
+                    <td><a href="{% url 'admin_site_preview_type_detail' site.slug preview_type.slug %}">{{ preview_type.slug }}</a></td>
+                    <td>{{ preview_type.domain }}</td>
+                    <td>{{ preview_type.domain_ssl|yesno:"Yes,No" }}</td>
+                    <td>{{ preview_type.basic_auth_user_required|yesno:"Yes,No" }}</td>
+                    <td>{{ preview_type.active|yesno:"Yes,No" }}</td>
+                    <td>{{ preview_type.notes }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No preview types found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Security Keys</h2>
+    <div class="security-keys">
+        <p><a href="{% url 'admin_site_new_security_key' site.slug %}" class="button">➕ Create New Security Key</a></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Active</th>
+                    <th>Created</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key in security_keys %}
+                <tr>
+                    <td>{{ key.active|yesno:"Yes,No" }}</td>
+                    <td>{{ key.created_at|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ key.notes }}</td>
+                    <td>
+                        <a href="{% url 'admin_site_security_key_edit' site_slug=site.slug security_key=key.id %}" class="btn btn-sm btn-primary">✏️ Edit</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No security keys found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Basic Auth Users</h2>
+    <div class="basic-auth-users">
+        <p><a href="{% url 'admin_site_new_basic_auth_user' site.slug %}" class="button">➕ Create New Basic Auth User</a></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Active</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in basic_auth_users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.active|yesno:"Yes,No" }}</td>
+                    <td>{{ user.notes }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No basic auth users found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="site-actions">
+        <p><a href="{% url 'admin_site_build_list' site.slug %}">View Builds</a></p>
+        <p><a href="{% url 'admin_site_list' %}">Back to Sites</a></p>
+    </div>
+{% endblock %} 

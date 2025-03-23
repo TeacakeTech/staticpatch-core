@@ -1,0 +1,30 @@
+{% extends 'staticpatchcore/base.html' %}
+
+{% block title %}New Preview Type for {{ site.slug }} - StaticPatch{% endblock %}
+
+{% block content %}
+    <h1>New Preview Type for {{ site.slug }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {% for field in form %}
+            <tr>
+                <th>{{ field.label_tag }}</th>
+                <td>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <div class="help-text">{{ field.help_text }}</div>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="error">{{ field.errors }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="form-actions">
+            <button type="submit">Create Preview Type</button>
+            <a href="{% url 'admin_site_detail' site.slug %}" class="button">Cancel</a>
+        </div>
+    </form>
+{% endblock %} 
