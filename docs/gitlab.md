@@ -4,11 +4,11 @@ This is a guide, edit as needed. You can use any static site builder you can get
 
 ## Live builds
 
-In "CI/CD" setting, set the following variables with "Expand variable reference" flag off:
+In "CI/CD" setting, set the following variables with "Expand variable reference" and "Protect variable" flags off:
 
-* `STATICPATCH_DOMAIN` - domain of the StaticPatch app to push to ("Protect variable" off)
-* `STATICPATCH_SITE` - slug of the site you want to push to ("Protect variable" off)
-* `STATICPATCH_SECURITY_KEY` - a security key for that site ("Protect variable" on)
+* `STATICPATCH_DOMAIN` - domain of the StaticPatch app to push to ("Visible")
+* `STATICPATCH_SITE` - slug of the site you want to push to ("Visible")
+* `STATICPATCH_SECURITY_KEY` - a security key for that site ("Masked and hidden")
 
 Add the following files:
 
@@ -47,9 +47,9 @@ deploy-main:
 
 You'll need the variables from the previous step.
 
-In "CI/CD" setting, add the following variables with "Expand variable reference" flag off:
+In "CI/CD" setting, add the following variable with "Expand variable reference" and "Protect variable" flags off:
 
-* `STATICPATCH_PREVIEW` - slug of the preview type you want to send previews to ("Protect variable" off)
+* `STATICPATCH_PREVIEW` - slug of the preview type you want to send previews to ("Visible")
 
 Change `.gitlab-ci.yml` to :
 
