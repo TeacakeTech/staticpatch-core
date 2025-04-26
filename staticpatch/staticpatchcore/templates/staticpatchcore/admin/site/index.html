@@ -146,6 +146,7 @@
                     <th>Username</th>
                     <th>Active</th>
                     <th>Notes</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -154,10 +155,13 @@
                     <td>{{ user.username }}</td>
                     <td>{{ user.active|yesno:"Yes,No" }}</td>
                     <td>{{ user.notes }}</td>
+                    <td>
+                        <a href="{% url 'admin_site_basic_auth_user_delete' site.slug user.username %}" class="button">🗑️ Delete</a>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="3">No basic auth users found</td>
+                    <td colspan="4">No basic auth users found</td>
                 </tr>
                 {% endfor %}
             </tbody>

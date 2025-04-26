@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 
 import staticpatchcore.models
 
@@ -251,6 +252,33 @@ def admin_site_new_basic_auth_user_view(request, site_slug):
         "staticpatchcore/admin/site/new_basic_auth_user.html",
         {"site": site, "form": form},
     )
+
+
+@login_required
+def admin_site_basic_auth_user_delete(request, site_slug, username):
+    site = get_object_or_404(staticpatchcore.models.SiteModel, slug=site_slug, deleted_at__isnull=True)
+    basic_auth_user = get_object_or_404(
+        staticpatchcore.models.BasicAuthUserModel,
+        site=site,
+        username=username,
+        deleted_at__isnull=True,
+    )
+
+    if request.method == "POST":
+        basic_auth_user.deleted_at = timezone.now()
+        basic_auth_user.save()
+        messages.success(request, f"Basic auth user '{username}' deleted successfully.")
+        update_server_config_task.enqueue()
+        return redirect("admin_site_detail", site_slug=site.slug)
+    else:
+        return render(
+            request,
+            "staticpatchcore/admin/site/basic_auth_user/delete.html",
+            {
+                "site": site,
+                "basic_auth_user": basic_auth_user,
+            },
+        )
 
 
 @login_required

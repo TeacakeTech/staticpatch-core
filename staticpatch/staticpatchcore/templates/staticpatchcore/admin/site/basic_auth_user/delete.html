@@ -1,0 +1,16 @@
+{% extends 'staticpatchcore/base.html' %}
+
+{% block title %}Delete Basic Auth User - {{ basic_auth_user.username }} - {{ site.slug }} - StaticPatch{% endblock %}
+
+{% block content %}
+    <h1>Delete Basic Auth User - {{ basic_auth_user.username }}</h1>
+    
+    <p>Are you sure you want to delete the basic auth user "{{ basic_auth_user.username }}" for site "{{ site.slug }}"?</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="button">Delete Basic Auth User</button>
+    </form>
+    
+    <p><a href="{% url 'admin_site_detail' site.slug %}" class="button">Cancel</a></p>
+{% endblock %}

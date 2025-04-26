@@ -83,6 +83,11 @@ urlpatterns = [
         name="admin_site_new_basic_auth_user",
     ),
     path(
+        "admin/site/<slug:site_slug>/basic_auth_user/<username>/delete",
+        views_admin.admin_site_basic_auth_user_delete,
+        name="admin_site_basic_auth_user_delete",
+    ),
+    path(
         "admin/site/<slug:site_slug>/new_alternative_domain",
         views_admin.admin_site_new_alternative_domain_view,
         name="admin_site_new_alternative_domain",
