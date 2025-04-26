@@ -1,0 +1,9 @@
+[Unit]
+Description=Run StaticPatch cron daily and a bit after boot
+
+[Timer]
+OnBootSec=15min
+OnUnitActiveSec=1d
+
+[Install]
+WantedBy=timers.target

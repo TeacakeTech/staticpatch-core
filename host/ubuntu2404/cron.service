@@ -1,0 +1,7 @@
+[Unit]
+Description=Staticpatch Cron
+
+[Service]
+ExecStart=/bin/bash -c "/home/staticpatch/run_manage.sh cron"
+User=staticpatch
+Group=staticpatch

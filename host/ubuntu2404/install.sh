@@ -72,5 +72,14 @@ cp /home/staticpatch/code/host/ubuntu2404/run_manage.sh /home/staticpatch/run_ma
 chown staticpatch:staticpatch /home/staticpatch/run_manage.sh
 chmod u+x /home/staticpatch/run_manage.sh
 
+
+# Set up cron
+echo "Set up cron ..."
+cp /home/staticpatch/code/host/ubuntu2404/cron.service /etc/systemd/system/staticpatchcron.service
+cp /home/staticpatch/code/host/ubuntu2404/cron.timer /etc/systemd/system/staticpatchcron.timer
+systemctl daemon-reload
+systemctl enable staticpatchcron.timer
+systemctl start staticpatchcron.timer
+
 # Done
 echo "Done!"
