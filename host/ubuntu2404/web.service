@@ -25,6 +25,7 @@ PassEnvironment=STATICPATCH_DEBUG
 PassEnvironment=STATICPATCH_ALLOWED_HOSTS
 PassEnvironment=STATICPATCH_SECRET_KEY
 PassEnvironment=STATICPATCH_STATIC_ROOT
+PassEnvironment=STATICPATCH_PURGE_DELETED_AFTER_SECONDS
 
 [Install]
 WantedBy=multi-user.target

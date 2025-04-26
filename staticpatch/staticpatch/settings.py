@@ -15,6 +15,7 @@ from pathlib import Path
 
 import environ
 
+# If you add a new variable here you have to add it to host/ubuntu2404/web.service too
 env = environ.Env(
     STATICPATCH_FILE_STORAGE=(str, "file_storage"),
     STATICPATCH_CERTBOT_EMAIL=(str, "code@example.com"),
@@ -26,6 +27,7 @@ env = environ.Env(
         "django-insecure-j(n-d!yamj1i^7nbc37)_kop&*ene!tvii#=ce_=i6+yw@u9ko",
     ),
     STATICPATCH_STATIC_ROOT=(str, "static"),
+    STATICPATCH_PURGE_DELETED_AFTER_SECONDS=(int, 604800),  # 7 days
 )
 
 
@@ -143,6 +145,8 @@ STATIC_ROOT = env("STATICPATCH_STATIC_ROOT")
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+PURGE_DELETED_AFTER_SECONDS = env("STATICPATCH_PURGE_DELETED_AFTER_SECONDS")
 
 TASKS = {
     "default": {
