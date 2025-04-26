@@ -6,7 +6,7 @@ from django.conf import settings
 from django_tasks import task
 
 import staticpatchcore.models
-import staticpatchcore.updateserverconfig
+import staticpatchcore.update_server_config
 
 
 @task()
@@ -46,7 +46,7 @@ def process_build_task(build_id: str) -> None:
         build.save()
 
         # Rebuild Apache Conf
-        staticpatchcore.updateserverconfig.update_server_config()
+        staticpatchcore.update_server_config.update_server_config()
 
     except Exception as e:
         # build.error = str(e)
@@ -57,4 +57,4 @@ def process_build_task(build_id: str) -> None:
 
 @task()
 def update_server_config_task() -> None:
-    staticpatchcore.updateserverconfig.update_server_config()
+    staticpatchcore.update_server_config.update_server_config()

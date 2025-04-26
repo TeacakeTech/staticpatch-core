@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-import staticpatchcore.updateserverconfig
+import staticpatchcore.update_server_config
 
 
 class Command(BaseCommand):
@@ -10,4 +10,4 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **options):
-        staticpatchcore.updateserverconfig.update_server_config()
+        staticpatchcore.update_server_config.update_server_config()
