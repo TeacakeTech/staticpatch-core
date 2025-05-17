@@ -13,7 +13,7 @@ And add the `STATICPATCH_PUBLIC_SECURITY_KEY` secret.
 
 Add the following files:
 
-`.github/workflows/deploy-live.yml`:
+`.github/workflows/live-deploy.yml`:
 
 ```
 name: Live Deploy
@@ -36,9 +36,9 @@ jobs:
     - name: Install Software
       run: pip install staticpatch
     - name: Make site
-      run: python staticpatch
+      run: python site.py build
     - name: Zip site
-      run: zip -r out.zip * .htaccess
+      run: zip -r out.zip *
       working-directory: ./_site
     - name: Upload Site
       run: "curl --retry 10 --retry-delay 30 --retry-all-errors -X POST \"https://${{ vars.STATICPATCH_DOMAIN }}/api/site/${{ vars.STATICPATCH_PUBLIC_SITE }}/publish_built_site\"  -H  \"Content-Type: multipart/form-data\" -H \"Security-Key: ${{ secrets.STATICPATCH_PUBLIC_SECURITY_KEY }}\" -F \"built_site=@\\\"out.zip\\\"\""
@@ -55,7 +55,7 @@ In "Secrets and Variables", "Actions", add the following variables:
 
 Add the following files:
 
-`.github/workflows/deploy-preview.yml`:
+`.github/workflows/preview-deploy.yml`:
 
 ```
 name: Preview Deploy
@@ -78,16 +78,16 @@ jobs:
     - name: Install Software
       run: pip install staticpatch
     - name: Make site
-      run: python staticpatch
+      run: python site.py build
     - name: Zip site
-      run: zip -r out.zip * .htaccess
+      run: zip -r out.zip *
       working-directory: ./_site
     - name: Upload Site
-      run: "curl --retry 10 --retry-delay 30 --retry-all-errors -X POST \"https://${{ vars.STATICPATCH_DOMAIN }}/api/site/${{ vars.STATICPATCH_PUBLIC_SITE }}/preview/${{ vars.STATICPATCH_PREVIEW }}/instance/${{ github.event.ref }}/publish_built_site\"  -H  \"Content-Type: multipart/form-data\" -H \"Security-Key: ${{ secrets.STATICPATCH_PUBLIC_SECURITY_KEY }}\" -F \"built_site=@\\\"out.zip\\\"\""
+      run: "curl --retry 10 --retry-delay 30 --retry-all-errors -X POST \"https://${{ vars.STATICPATCH_DOMAIN }}/api/site/${{ vars.STATICPATCH_PUBLIC_SITE }}/preview/${{ vars.STATICPATCH_PREVIEW }}/instance/${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}/publish_built_site\"  -H  \"Content-Type: multipart/form-data\" -H \"Security-Key: ${{ secrets.STATICPATCH_PUBLIC_SECURITY_KEY }}\" -F \"built_site=@\\\"out.zip\\\"\""
       working-directory: ./_site
 ```
 
-`.github/workflows/delete-preview.yml`:
+`.github/workflows/preview-delete.yml`:
 
 ```
 name: Preview Delete
@@ -96,7 +96,7 @@ on: delete
 jobs:
   preview-delete:
     runs-on: ubuntu-latest
-    if: github.event.ref_type == 'branch' && github.event.ref != 'main'
+    if: github.event.ref_type == 'branch' && github.event.ref != 'refs/heads/main'
     steps:
     - name: Deactivate Site
       run: "curl --retry 10 --retry-delay 30 --retry-all-errors -X POST \"https://${{ vars.STATICPATCH_DOMAIN }}/api/site/${{ vars.STATICPATCH_PUBLIC_SITE }}/preview/${{ vars.STATICPATCH_PREVIEW }}/instance/${{ github.event.ref }}/deactivate\" -H \"Security-Key: ${{ secrets.STATICPATCH_PUBLIC_SECURITY_KEY }}\" "

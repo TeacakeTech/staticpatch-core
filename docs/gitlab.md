@@ -35,7 +35,7 @@ deploy-main:
   stage: deploy
   script: 
     - pip install staticpipes
-    - python staticpipes.py build
+    - python site.py build
     - apt-get update
     - apt-get install zip
     - cd _site && zip -r out.zip * 
@@ -76,7 +76,7 @@ deploy-dev:
   stage: deploy-dev
   script: 
     - pip install staticpipes
-    - python staticpipes.py build
+    - python site.py build
     - apt-get update
     - apt-get install zip
     - cd _site && zip -r out.zip * 
