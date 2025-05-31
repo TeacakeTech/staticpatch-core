@@ -1,0 +1,15 @@
+{
+	"name": "StaticPatch Dev Container",
+	"build": {
+		"dockerfile": "dev/dev.ubuntu.2404.Dockerfile",
+		"context": "."
+	},
+	"customizations": {
+		"vscode": {
+			"extensions":[""]
+		}
+	},
+	"remoteUser": "staticpatch",
+	"workspaceMount": "source=${localWorkspaceFolder},target=/home/staticpatch/code,type=bind",
+	"workspaceFolder": "/home/staticpatch/code"
+}
