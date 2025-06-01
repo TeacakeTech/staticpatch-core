@@ -36,5 +36,5 @@ def logout_view(request):
 
 def site_build_detail_view(request, site_slug, build_id):
     site = get_object_or_404(staticpatchcore.models.SiteModel, slug=site_slug, deleted_at__isnull=True)
-    build = get_object_or_404(staticpatchcore.models.BuildModel, id=build_id, site=site)
+    build = get_object_or_404(staticpatchcore.models.BuildModel, id=build_id, site=site, deleted_at__isnull=True)
     return render(request, "staticpatchcore/site/build/index.html", {"site": site, "build": build})

@@ -1,5 +1,7 @@
+import os
 import uuid
 
+from django.conf import settings
 from django.db import models
 
 
@@ -74,9 +76,19 @@ class BuildModel(models.Model):
     started_at = models.DateTimeField(null=True)
     finished_at = models.DateTimeField(null=True)
     failed_at = models.DateTimeField(null=True)
+    deleted_at = models.DateTimeField(null=True)
 
     def get_file_storage_slug(self) -> str:
         return self.created_at.strftime("%Y-%m-%d-%H-%M-%S") + "-" + str(self.id)
+
+    def get_full_file_storage_directory(self) -> str:
+        return os.path.join(
+            settings.FILE_STORAGE,
+            "site",
+            str(self.site.id),
+            "build",
+            str(self.get_file_storage_slug()),
+        )
 
 
 class SiteSecurityKeyModel(models.Model):

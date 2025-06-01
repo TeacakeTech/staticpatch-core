@@ -29,6 +29,7 @@ class ApacheConfig:
                     site=site,
                     site_preview_instance__isnull=True,
                     finished_at__isnull=False,
+                    deleted_at__isnull=True,
                 )
                 .order_by("-finished_at")
                 .first()
@@ -94,6 +95,7 @@ class ApacheConfig:
                             site=site,
                             site_preview_instance=preview_instance,
                             finished_at__isnull=False,
+                            deleted_at__isnull=True,
                         )
                         .order_by("-finished_at")
                         .first()

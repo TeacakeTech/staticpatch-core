@@ -13,6 +13,7 @@
                     <th>Finished</th>
                     <th>Failed</th>
                     <th>Preview Instance</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +30,9 @@
                                 -
                             {% endif %}
                         </td>
-                        <td><a href="{% url 'admin_site_build_detail' site.slug build.id %}">Details</a></td>
+                        <td>
+                            <a href="{% url 'admin_site_build_detail' site.slug build.id %}">Details</a>
+                        </td>
                     </tr>
                 {% empty %}
                     <tr>

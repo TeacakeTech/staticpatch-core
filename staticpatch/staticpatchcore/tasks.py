@@ -2,7 +2,6 @@ import datetime
 import os
 import zipfile
 
-from django.conf import settings
 from django_tasks import task
 
 import staticpatchcore.models
@@ -12,6 +11,8 @@ import staticpatchcore.update_server_config
 @task()
 def process_build_task(build_id: str) -> None:
     build = staticpatchcore.models.BuildModel.objects.get(id=build_id)
+    if build.deleted_at:
+        return
     print("Processing build {0} for site {1} ({2})".format(build.id, build.site.slug, build.site.id))
 
     # Start build
@@ -22,19 +23,11 @@ def process_build_task(build_id: str) -> None:
 
         # Extract Zip
         file_name = os.path.join(
-            settings.FILE_STORAGE,
-            "site",
-            str(build.site.id),
-            "build",
-            str(build.get_file_storage_slug()),
+            build.get_full_file_storage_directory(),
             "site.zip",
         )
         out_dir_name = os.path.join(
-            settings.FILE_STORAGE,
-            "site",
-            str(build.site.id),
-            "build",
-            str(build.get_file_storage_slug()),
+            build.get_full_file_storage_directory(),
             "out",
         )
         os.makedirs(out_dir_name)

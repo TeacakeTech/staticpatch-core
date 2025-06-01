@@ -53,6 +53,11 @@ urlpatterns = [
         name="admin_site_build_detail",
     ),
     path(
+        "admin/site/<slug:site_slug>/build/<uuid:build_id>/delete",
+        views_admin.admin_site_build_delete,
+        name="admin_site_build_delete",
+    ),
+    path(
         "admin/site/<slug:site_slug>/new_security_key",
         views_admin.admin_site_new_security_key_view,
         name="admin_site_new_security_key",

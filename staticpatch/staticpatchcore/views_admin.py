@@ -88,7 +88,9 @@ def admin_site_edit_view(request, site_slug):
 @login_required
 def admin_site_build_list_view(request, site_slug):
     site = get_object_or_404(staticpatchcore.models.SiteModel, slug=site_slug, deleted_at__isnull=True)
-    builds = staticpatchcore.models.BuildModel.objects.filter(site=site).order_by("-created_at")
+    builds = staticpatchcore.models.BuildModel.objects.filter(site=site, deleted_at__isnull=True).order_by(
+        "-created_at"
+    )
     return render(
         request,
         "staticpatchcore/admin/site/build.html",
@@ -99,10 +101,29 @@ def admin_site_build_list_view(request, site_slug):
 @login_required
 def admin_site_build_detail_view(request, site_slug, build_id):
     site = get_object_or_404(staticpatchcore.models.SiteModel, slug=site_slug, deleted_at__isnull=True)
-    build = get_object_or_404(staticpatchcore.models.BuildModel, id=build_id, site=site)
+    build = get_object_or_404(staticpatchcore.models.BuildModel, id=build_id, site=site, deleted_at__isnull=True)
     return render(
         request,
         "staticpatchcore/admin/site/build/index.html",
+        {"site": site, "build": build},
+    )
+
+
+@login_required
+def admin_site_build_delete(request, site_slug, build_id):
+    site = get_object_or_404(staticpatchcore.models.SiteModel, slug=site_slug, deleted_at__isnull=True)
+    build = get_object_or_404(staticpatchcore.models.BuildModel, id=build_id, site=site, deleted_at__isnull=True)
+
+    if request.method == "POST":
+        build.deleted_at = timezone.now()
+        build.save()
+        messages.success(request, "Build deleted successfully.")
+        update_server_config_task.enqueue()
+        return redirect("admin_site_build_list", site_slug=site.slug)
+
+    return render(
+        request,
+        "staticpatchcore/admin/site/build/delete.html",
         {"site": site, "build": build},
     )
 

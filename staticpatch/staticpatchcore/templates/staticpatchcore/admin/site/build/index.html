@@ -4,35 +4,7 @@
 
 {% block content %}
     <h1>Build {{ build.id }} for {{ site.slug }}</h1>
-    <div class="build-details">
-        <table>
-            <tr>
-                <th>Created:</th>
-                <td>{{ build.created_at|date:"Y-m-d H:i:s" }}</td>
-            </tr>
-            <tr>
-                <th>Started:</th>
-                <td>{{ build.started_at|date:"Y-m-d H:i:s"|default:"-" }}</td>
-            </tr>
-            <tr>
-                <th>Finished:</th>
-                <td>{{ build.finished_at|date:"Y-m-d H:i:s"|default:"-" }}</td>
-            </tr>
-            <tr>
-                <th>Failed:</th>
-                <td>{{ build.failed_at|date:"Y-m-d H:i:s"|default:"-" }}</td>
-            </tr>
-            <tr>
-                <th>Site Preview Instance:</th>
-                <td>
-                    {% if build.site_preview_instance %}
-                        {{ build.site_preview_instance.slug }}
-                    {% else %}
-                        -
-                    {% endif %}
-                </td>
-            </tr>
-        </table>
-    </div>
+    {% include 'staticpatchcore/admin/site/build/build_details_table.html' %}
+    <p><a href="{% url 'admin_site_build_delete' site.slug build.id %}">Delete</a></p>
     <p><a href="{% url 'admin_site_build_list' site.slug %}">Back to Builds</a></p>
-{% endblock %} 
+{% endblock %}

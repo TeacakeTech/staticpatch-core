@@ -1,6 +1,5 @@
 import os
 
-from django.conf import settings
 from django.http import HttpResponse
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -38,16 +37,9 @@ def api_publish_built_site_view(request, site_slug):
     build = staticpatchcore.models.BuildModel(site=site)
     build.save()
 
-    dir_name = os.path.join(
-        settings.FILE_STORAGE,
-        "site",
-        str(site.id),
-        "build",
-        str(build.get_file_storage_slug()),
-    )
-    os.makedirs(dir_name)
+    os.makedirs(build.get_full_file_storage_directory())
 
-    file_name = os.path.join(dir_name, "site.zip")
+    file_name = os.path.join(build.get_full_file_storage_directory(), "site.zip")
     with open(file_name, "wb") as fp:
         for chunk in request.FILES["built_site"].chunks():
             fp.write(chunk)
@@ -114,16 +106,9 @@ def api_publish_built_site_preview_instance_view(request, site_slug, preview_typ
     build = staticpatchcore.models.BuildModel(site=site, site_preview_instance=site_preview_instance_object)
     build.save()
 
-    dir_name = os.path.join(
-        settings.FILE_STORAGE,
-        "site",
-        str(site.id),
-        "build",
-        str(build.get_file_storage_slug()),
-    )
-    os.makedirs(dir_name)
+    os.makedirs(build.get_full_file_storage_directory())
 
-    file_name = os.path.join(dir_name, "site.zip")
+    file_name = os.path.join(build.get_full_file_storage_directory(), "site.zip")
     with open(file_name, "wb") as fp:
         for chunk in request.FILES["built_site"].chunks():
             fp.write(chunk)
