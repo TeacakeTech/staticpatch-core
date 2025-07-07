@@ -34,8 +34,9 @@ WORKDIR /home/staticpatch/code
 USER staticpatch:staticpatch
 
 # Python Deps
-COPY requirements.txt .
+COPY requirements_dev.txt .
+RUN /bin/bash -c "echo \"export PATH=\$PATH:/home/staticpatch/.local/bin/\" >> /home/staticpatch/.bashrc"
 RUN python3 -m pip config set global.break-system-packages true
-RUN pip install --user -r requirements.txt
+RUN pip install --user -r requirements_dev.txt
 
 CMD [ "/bin/bash", "-c", "--", "while true; do sleep 30; done;"  ]
