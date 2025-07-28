@@ -17,6 +17,18 @@
             <td>{{ build.failed_at|date:"Y-m-d H:i:s"|default:"-" }}</td>
         </tr>
         <tr>
+            <th>
+                Sub Site:
+            </th>
+            <td>
+                {% if build.sub_site %}
+                    <a href="{% url 'admin_site_sub_site_detail' site.slug build.sub_site.id %}">{{ build.sub_site.url }}</a>
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
             <th>Site Preview Instance:</th>
             <td>
                 {% if build.site_preview_instance %}

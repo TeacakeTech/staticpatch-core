@@ -65,3 +65,10 @@ class BuildModelAdmin(admin.ModelAdmin):
     list_filter = ("site",)
     search_fields = ("site__slug",)
     readonly_fields = ("id", "created_at", "started_at", "finished_at", "failed_at")
+
+
+@admin.register(staticpatchcore.models.SubSiteModel)
+class SubSiteModelAdmin(admin.ModelAdmin):
+    list_display = ("id", "site", "url", "active", "created_at", "deleted_at")
+    list_filter = ("active",)
+    search_fields = ("url",)

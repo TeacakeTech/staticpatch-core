@@ -1,3 +1,4 @@
+import json
 import os
 
 from django.conf import settings
@@ -28,12 +29,45 @@ class ApacheConfig:
                 staticpatchcore.models.BuildModel.objects.filter(
                     site=site,
                     site_preview_instance__isnull=True,
+                    sub_site__isnull=True,
                     finished_at__isnull=False,
                     deleted_at__isnull=True,
                 )
                 .order_by("-finished_at")
                 .first()
             )
+
+            # Sub Sites
+            sub_sites = {}
+            for sub_site in staticpatchcore.models.SubSiteModel.objects.filter(
+                site=site, deleted_at__isnull=True, active=True
+            ):
+                sub_site_build = (
+                    staticpatchcore.models.BuildModel.objects.filter(
+                        site=site,
+                        site_preview_instance__isnull=True,
+                        sub_site=sub_site,
+                        finished_at__isnull=False,
+                        deleted_at__isnull=True,
+                    )
+                    .order_by("-finished_at")
+                    .first()
+                )
+                if sub_site_build:
+                    sub_sites[sub_site.url] = sub_site_build
+
+            if site.public_info:
+                site_info_dir = "{}/site/{}/publicinfo".format(settings.FILE_STORAGE, site.id)
+                os.makedirs(site_info_dir, exist_ok=True)
+                site_info_data = {
+                    "sub_sites": {k: {"at": v.finished_at.isoformat()} for k, v in sub_sites.items()},
+                    "root_site": ({"at": build.finished_at.isoformat()} if build else None),
+                }
+                with open(os.path.join(site_info_dir, "data.json"), "w") as fp:
+                    json.dump(site_info_data, fp, indent=2)
+                sub_sites[staticpatchcore.models.SubSiteModel.normalise_url(site.public_info_url)] = "publicinfo"
+
+            # and generate
             self.__out += self._generate_virtual_host(
                 site,
                 build,
@@ -42,6 +76,7 @@ class ApacheConfig:
                 site.basic_auth_user_required,
                 "main",
                 ssl_enabled=site.main_domain_ssl,
+                sub_sites=sub_sites,
             )
 
             # Alternative Domains
@@ -94,6 +129,7 @@ class ApacheConfig:
                         staticpatchcore.models.BuildModel.objects.filter(
                             site=site,
                             site_preview_instance=preview_instance,
+                            sub_site__isnull=True,
                             finished_at__isnull=False,
                             deleted_at__isnull=True,
                         )
@@ -122,14 +158,7 @@ class ApacheConfig:
                     self.__password_files[site.id] += f"{user.username}:{user.password_crypted}\n"
 
     def _generate_virtual_host(
-        self,
-        site,
-        build,
-        domain,
-        allow_override,
-        basic_auth_user_required,
-        log_type,
-        ssl_enabled=False,
+        self, site, build, domain, allow_override, basic_auth_user_required, log_type, ssl_enabled=False, sub_sites={}
     ):
 
         out = ""
@@ -159,14 +188,33 @@ class ApacheConfig:
         if allow_override:
             out += "AccessFileName " + site.access_file_name + "\n"
 
+        # Main directory
         dir = (
             "{}/site/{}/build/{}/out".format(settings.FILE_STORAGE, site.id, build.get_file_storage_slug())
             if build
             else "{}/webroot".format(settings.FILE_STORAGE)
         )
         out += "DocumentRoot " + dir + "\n"
-        out += '<Directory "' + dir + '">\n'
-        out += "AllowOverride " + ("All Nonfatal=All" if allow_override and build else "None") + "\n"
+        out += self._get_boilerplate_for_directory(dir, allow_override, basic_auth_user_required, site)
+
+        # Sub sites
+        for sub_site_url, sub_site_build in sub_sites.items():
+            sub_site_dir = (
+                "{}/site/{}/build/{}/out".format(settings.FILE_STORAGE, site.id, sub_site_build.get_file_storage_slug())
+                if isinstance(sub_site_build, staticpatchcore.models.BuildModel)
+                else "{}/site/{}/{}".format(settings.FILE_STORAGE, site.id, sub_site_build)
+            )
+            out += 'Alias "' + sub_site_url + '" "' + sub_site_dir + '"\n'
+            out += self._get_boilerplate_for_directory(sub_site_dir, allow_override, basic_auth_user_required, site)
+
+        # and wrap up ...
+        out += self._get_boilerplate_virtual_host(site, log_type)
+        out += "</VirtualHost>\n"
+        return out
+
+    def _get_boilerplate_for_directory(self, dir, allow_override, basic_auth_user_required, site):
+        out = '<Directory "' + dir + '">\n'
+        out += "AllowOverride " + ("All Nonfatal=All" if allow_override else "None") + "\n"
         if basic_auth_user_required:
             out += "AuthType Basic\n"
             out += 'AuthName "StaticPatch"\n'
@@ -183,8 +231,6 @@ class ApacheConfig:
         else:
             out += "Require all granted\n"
         out += "</Directory>\n"
-        out += self._get_boilerplate_virtual_host(site, log_type)
-        out += "</VirtualHost>\n"
         return out
 
     def _get_boilerplate_virtual_host(self, site, log_type):

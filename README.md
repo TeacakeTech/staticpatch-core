@@ -3,7 +3,7 @@
 * 🖥️ Static website hosting with Apache on your own Linux VM
 * 🚢 Continuous Deployment from GitHub Actions, GitLab and more with any static site builder you can run in them (so pretty much any of them)
 * 🔐 Continuous Deployment from public or private git repositories
-* 👁️ Preview builds on sub domains
+* 👁️ Preview builds on sub domains and sub directories
 * 🔒 CertBot and Let's Encrypt for automatic SSL
 * 🔑 HTTP basic auth
 * ✏️  Add .htaccess files with the Apache directives you already know - eg, 

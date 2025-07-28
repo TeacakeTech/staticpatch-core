@@ -13,6 +13,8 @@ class SiteModel(models.Model):
     basic_auth_user_required = models.BooleanField(null=False, default=False)
     allow_override = models.BooleanField(null=False, default=False)
     access_file_name = models.CharField(max_length=500, null=False, default=".htaccess")
+    public_info = models.BooleanField(null=False, default=False)
+    public_info_url = models.CharField(max_length=500, null=False, default="/staticpatchsiteinfo")
     active = models.BooleanField(null=False, default=True)
     created_at = models.DateTimeField(auto_now_add=True, null=False)
     deleted_at = models.DateTimeField(null=True)
@@ -68,10 +70,40 @@ class SitePreviewInstanceModel(models.Model):
         ]
 
 
+class SubSiteModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, null=False)
+    site = models.ForeignKey(SiteModel, on_delete=models.CASCADE, null=False)
+    url = models.CharField(max_length=500, null=False)
+    created_at = models.DateTimeField(auto_now_add=True, null=False)
+    active = models.BooleanField(null=False, default=True)
+    deleted_at = models.DateTimeField(null=True)
+
+    @staticmethod
+    def normalise_url(url):
+        if url.endswith("/"):
+            url = url[:-1]
+        if not url.startswith("/"):
+            url = "/" + url
+        return url
+
+    def save(self, **kwargs):
+        self.url = self.normalise_url(self.url)
+        super().save(**kwargs)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["site", "url"],
+                name="sub_site_site_url_unique",
+            )
+        ]
+
+
 class BuildModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, null=False)
     site = models.ForeignKey(SiteModel, on_delete=models.CASCADE, null=False)
     site_preview_instance = models.ForeignKey(SitePreviewInstanceModel, on_delete=models.CASCADE, null=True)
+    sub_site = models.ForeignKey(SubSiteModel, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=False)
     started_at = models.DateTimeField(null=True)
     finished_at = models.DateTimeField(null=True)

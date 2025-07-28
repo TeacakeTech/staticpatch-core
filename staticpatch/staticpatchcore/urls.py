@@ -102,11 +102,21 @@ urlpatterns = [
         views_admin.admin_site_edit_alternative_domain_view,
         name="admin_site_edit_alternative_domain",
     ),
+    path(
+        "admin/site/<slug:site_slug>/sub_site/<uuid:sub_site_id>",
+        views_admin.admin_site_sub_site_detail_view,
+        name="admin_site_sub_site_detail",
+    ),
     # API
     path(
         "api/site/<slug:site_slug>/publish_built_site",
         views_api.api_publish_built_site_view,
         name="publish_built_site",
+    ),
+    path(
+        "api/site/<slug:site_slug>/deactivate",
+        views_api.api_deactivate_view,
+        name="api_deactivate",
     ),
     path(
         "api/site/<slug:site_slug>/preview/<slug:preview_type_slug>/instance/<slug:preview_instance_slug>"

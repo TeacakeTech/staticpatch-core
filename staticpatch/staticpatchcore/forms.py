@@ -22,6 +22,8 @@ class NewSiteForm(forms.ModelForm):
             "basic_auth_user_required",
             "allow_override",
             "access_file_name",
+            "public_info",
+            "public_info_url",
             "active",
             "notes",
         ]
@@ -99,6 +101,8 @@ class EditSiteForm(forms.ModelForm):
             "basic_auth_user_required",
             "allow_override",
             "access_file_name",
+            "public_info",
+            "public_info_url",
             "active",
             "notes",
         ]

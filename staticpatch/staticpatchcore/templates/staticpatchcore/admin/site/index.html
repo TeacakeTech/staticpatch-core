@@ -32,6 +32,16 @@
                 <td>{{ site.access_file_name }}</td>
             </tr>
             <tr>
+                <th>Public Info:</th>
+                <td>{{ site.public_info|yesno:"Yes,No" }}</td>
+            </tr>
+            {% if site.public_info %}
+                <tr>
+                    <th>Public Info URL:</th>
+                    <td>{{ site.public_info_url }}</td>
+                </tr>
+            {% endif %}
+            <tr>
                 <th>Active:</th>
                 <td>{{ site.active|yesno:"Yes,No" }}</td>
             </tr>
@@ -39,6 +49,34 @@
                 <th>Notes:</th>
                 <td>{{ site.notes }}</td>
             </tr>
+        </table>
+    </div>
+
+    <h2>Sub Sites</h2>
+    <div class="sub-sites">
+        <table>
+            <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>Active</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub_site in sub_sites %}
+                <tr>
+                    <td>{{ sub_site.url }}</td>
+                    <td>{{ sub_site.active|yesno:"Yes,No" }}</td>
+                    <td>
+                        <a href="{% url 'admin_site_sub_site_detail' site.slug sub_site.id %}" class="button">View</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No sub sites found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 

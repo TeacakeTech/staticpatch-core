@@ -33,8 +33,24 @@ def api_publish_built_site_view(request, site_slug):
     except staticpatchcore.models.SiteSecurityKeyModel.DoesNotExist:
         return HttpResponse("Access Denied", status=403)
 
+    # Get sub site (optional)
+    sub_site = None
+    sub_site_url = request.POST.get("sub_site_url")
+    if sub_site_url:
+        sub_site_url = staticpatchcore.models.SubSiteModel.normalise_url(sub_site_url)
+        try:
+            sub_site = staticpatchcore.models.SubSiteModel.objects.get(
+                site=site, url=sub_site_url, deleted_at__isnull=True
+            )
+            if not sub_site.active:
+                sub_site.active = True
+                sub_site.save()
+        except staticpatchcore.models.SubSiteModel.DoesNotExist:
+            sub_site = staticpatchcore.models.SubSiteModel(site=site, url=sub_site_url, active=True)
+            sub_site.save()
+
     # Save Build
-    build = staticpatchcore.models.BuildModel(site=site)
+    build = staticpatchcore.models.BuildModel(site=site, sub_site=sub_site)
     build.save()
 
     os.makedirs(build.get_full_file_storage_directory())
@@ -50,6 +66,50 @@ def api_publish_built_site_view(request, site_slug):
     # Respond to user with build URL
     build_url = request.build_absolute_uri(reverse("public_site_build_detail", args=[site.slug, build.id]))
     return HttpResponse(build_url + "\n")
+
+
+@csrf_exempt
+def api_deactivate_view(request, site_slug):
+    # Get Site
+    try:
+        site = staticpatchcore.models.SiteModel.objects.get(slug=site_slug)
+    except staticpatchcore.models.SiteModel.DoesNotExist:
+        return HttpResponse("Site not found", status=404)
+
+    # Check Security code
+    security_key = request.headers.get("Security-Key")
+    if not security_key:
+        return HttpResponse("No security key provided", status=403)
+
+    try:
+        staticpatchcore.models.SiteSecurityKeyModel.objects.get(
+            site=site, key=security_key, active=True, deleted_at__isnull=True
+        )
+    except staticpatchcore.models.SiteSecurityKeyModel.DoesNotExist:
+        return HttpResponse("Access Denied", status=403)
+
+    # Get sub site (at the moment the only option here)
+    sub_site_url = request.POST.get("sub_site_url")
+    if sub_site_url:
+        sub_site_url = staticpatchcore.models.SubSiteModel.normalise_url(sub_site_url)
+        try:
+            sub_site = staticpatchcore.models.SubSiteModel.objects.get(
+                site=site, url=sub_site_url, deleted_at__isnull=True
+            )
+            sub_site.active = False
+            sub_site.save()
+        except staticpatchcore.models.SubSiteModel.DoesNotExist:
+            return HttpResponse("Sub site not found", status=404)
+
+    # Check the user did pass one option
+    if not sub_site_url:
+        return HttpResponse("Try passing sub_site_url header")
+
+    # Enqueue task
+    update_server_config_task.enqueue()
+
+    # Respond to user
+    return HttpResponse("")
 
 
 @csrf_exempt
