@@ -15,7 +15,7 @@ Create the `staticpatch` user:
 
 Check out the code into this users home directory:
 
-    su -c "git clone https://github.com/StaticPatch/StaticPatch.git /home/staticpatch/code" staticpatch 
+    su -c "git clone https://github.com/TeacakeTech/staticpatch-core.git /home/staticpatch/code" staticpatch
 
 Create file /home/staticpatch/env_vars and set and then edit the contents:
 
