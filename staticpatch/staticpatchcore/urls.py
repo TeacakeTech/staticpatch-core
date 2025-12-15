@@ -103,6 +103,11 @@ urlpatterns = [
         name="admin_site_edit_alternative_domain",
     ),
     path(
+        "admin/site/<slug:site_slug>/alternative_domain/<uuid:alternative_domain_id>/promote",
+        views_admin.admin_site_promote_alternative_domain,
+        name="admin_site_promote_alternative_domain",
+    ),
+    path(
         "admin/site/<slug:site_slug>/sub_site/<uuid:sub_site_id>",
         views_admin.admin_site_sub_site_detail_view,
         name="admin_site_sub_site_detail",

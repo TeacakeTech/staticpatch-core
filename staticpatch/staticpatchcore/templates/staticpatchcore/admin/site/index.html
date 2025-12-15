@@ -100,7 +100,13 @@
                     <td>{{ domain.domain_ssl|yesno:"Yes,No" }}</td>
                     <td>{{ domain.active|yesno:"Yes,No" }}</td>
                     <td>{{ domain.notes }}</td>
-                    <td><a href="{% url 'admin_site_edit_alternative_domain' site.slug domain.id %}" class="button">✏️ Edit</a></td>
+                    <td>
+                        <a href="{% url 'admin_site_edit_alternative_domain' site.slug domain.id %}" class="button">✏️ Edit</a>
+                        <form action="{% url 'admin_site_promote_alternative_domain' site.slug domain.id %}" method="post" onsubmit="return confirm('Are you sure?')">
+                            {% csrf_token %}
+                            <input type="submit" value="Promote to main domain">
+                        </form>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>

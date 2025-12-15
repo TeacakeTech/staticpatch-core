@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -348,6 +349,38 @@ def admin_site_edit_alternative_domain_view(request, site_slug, alternative_doma
         "staticpatchcore/admin/site/alternative_domain/edit.html",
         {"site": site, "alternative_domain": alternative_domain, "form": form},
     )
+
+
+@login_required
+@transaction.atomic
+def admin_site_promote_alternative_domain(request, site_slug, alternative_domain_id):
+    site = get_object_or_404(staticpatchcore.models.SiteModel, slug=site_slug, deleted_at__isnull=True)
+    alternative_domain = get_object_or_404(
+        staticpatchcore.models.SiteAlternativeDomainModel,
+        id=alternative_domain_id,
+        site=site,
+        deleted_at__isnull=True,
+    )
+    if request.method == "POST":
+        old_main_domain = site.main_domain
+        old_main_domain_ssl = site.main_domain_ssl
+
+        old_alternative_domain = alternative_domain.domain
+        old_alternative_domain_ssl = alternative_domain.domain_ssl
+
+        alternative_domain.domain = old_main_domain
+        alternative_domain.domain_ssl = old_main_domain_ssl
+
+        site.main_domain = old_alternative_domain
+        site.main_domain_ssl = old_alternative_domain_ssl
+
+        site.save()
+        alternative_domain.save()
+
+        messages.success(request, "Alternative domain promoted successfully.")
+        update_server_config_task.enqueue()
+
+    return redirect("admin_site_detail", site_slug=site.slug)
 
 
 @login_required
