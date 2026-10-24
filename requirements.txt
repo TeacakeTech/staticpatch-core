@@ -4,26 +4,24 @@
 #
 #    pip-compile
 #
-asgiref==3.9.1
+asgiref==3.13.0
     # via django
-django==5.2.4
+django==5.2.18
     # via
     #   -r requirements.in
     #   django-stubs-ext
     #   django-tasks
-django-environ==0.12.0
+django-environ==0.14.0
     # via -r requirements.in
-django-stubs-ext==5.2.2
+django-stubs-ext==6.1.2
     # via django-tasks
 django-tasks @ git+https://github.com/realOrangeOne/django-tasks@02742634a1d09d1f28b6308315ce3865f9db456a
     # via -r requirements.in
-gunicorn==23.0.0
+gunicorn==26.2.0
     # via -r requirements.in
-packaging==25.0
-    # via gunicorn
-sqlparse==0.5.3
+sqlparse==0.6.0
     # via django
-typing-extensions==4.14.1
+typing-extensions==4.16.0
     # via
     #   django-stubs-ext
     #   django-tasks

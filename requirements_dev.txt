@@ -4,61 +4,65 @@
 #
 #    pip-compile requirements_dev.in
 #
-asgiref==3.9.1
+asgiref==3.13.0
     # via
     #   -r requirements.txt
     #   django
-black==25.1.0
+ast-serialize==0.13.1
+    # via mypy
+black==26.10.1
     # via -r requirements_dev.in
-click==8.2.1
+click==8.5.0
     # via black
-django==5.2.4
+django==5.2.18
     # via
     #   -r requirements.txt
     #   django-stubs-ext
     #   django-tasks
-django-environ==0.12.0
+django-environ==0.14.0
     # via -r requirements.txt
-django-stubs-ext==5.2.2
+django-stubs-ext==6.1.2
     # via
     #   -r requirements.txt
     #   django-tasks
 django-tasks @ git+https://github.com/realOrangeOne/django-tasks@02742634a1d09d1f28b6308315ce3865f9db456a
     # via -r requirements.txt
-flake8==7.3.0
+flake8==7.4.1
     # via -r requirements_dev.in
-gunicorn==23.0.0
+gunicorn==26.2.0
     # via -r requirements.txt
-isort==6.0.1
+isort==9.0.2
     # via -r requirements_dev.in
+librt==0.16.0
+    # via mypy
 mccabe==0.7.0
     # via flake8
-mypy==1.17.0
+mypy==2.4.0
     # via -r requirements_dev.in
 mypy-extensions==1.1.0
     # via
     #   black
+    #   isort
     #   mypy
-packaging==25.0
-    # via
-    #   -r requirements.txt
-    #   black
-    #   gunicorn
-pathspec==0.12.1
-    # via
-    #   black
-    #   mypy
-platformdirs==4.3.8
+packaging==26.3
     # via black
-pycodestyle==2.14.0
+pathspec==1.1.1
+    # via
+    #   black
+    #   mypy
+platformdirs==4.13.5
+    # via black
+pycodestyle==2.15.0
     # via flake8
-pyflakes==3.4.0
+pyflakes==4.0.3
     # via flake8
-sqlparse==0.5.3
+pytokens==0.4.1
+    # via black
+sqlparse==0.6.0
     # via
     #   -r requirements.txt
     #   django
-typing-extensions==4.14.1
+typing-extensions==4.16.0
     # via
     #   -r requirements.txt
     #   django-stubs-ext
