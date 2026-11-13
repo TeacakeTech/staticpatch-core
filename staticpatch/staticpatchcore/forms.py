@@ -2,6 +2,7 @@ import random
 import string
 
 from django import forms
+from django.core.exceptions import ValidationError
 
 from .models import (
     BasicAuthUserModel,
@@ -65,13 +66,21 @@ class NewSitePreviewTypeForm(forms.ModelForm):
 
 
 class NewBasicAuthUserForm(forms.ModelForm):
+    password_1 = forms.CharField(widget=forms.PasswordInput(), label="Password")
+    password_2 = forms.CharField(widget=forms.PasswordInput(), label="Password (Repeat)")
+
     class Meta:
         model = BasicAuthUserModel
-        fields = ["username", "password_crypted", "active", "notes"]
+        fields = ["username", "password_1", "password_2", "active", "notes"]
         widgets = {
             "password_crypted": forms.PasswordInput(),
             "notes": forms.Textarea(attrs={"rows": 4}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("password_1") != cleaned_data.get("password_2"):
+            raise ValidationError("Passwords do not match.")
 
 
 class NewSiteAlternativeDomainForm(forms.ModelForm):

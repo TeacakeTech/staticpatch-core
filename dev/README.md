@@ -89,7 +89,7 @@ To setup, open one connection to the container as normal user and run:
 
 ```
 cd ~/code/staticpatch/
-black
+black .
 isort .
 flake8
 python3 manage.py test

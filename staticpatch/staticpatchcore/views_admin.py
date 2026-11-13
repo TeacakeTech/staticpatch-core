@@ -264,7 +264,7 @@ def admin_site_new_basic_auth_user_view(request, site_slug):
         if form.is_valid():
             basic_auth_user = form.save(commit=False)
             basic_auth_user.site = site
-            basic_auth_user.password_crypted = crypt_apache_password(form.cleaned_data["password_crypted"])
+            basic_auth_user.password_crypted = crypt_apache_password(form.cleaned_data["password_1"])
             basic_auth_user.save()
             messages.success(request, "Basic auth user created successfully.")
             update_server_config_task.enqueue()
