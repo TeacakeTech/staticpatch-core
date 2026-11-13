@@ -11,6 +11,9 @@
 * 🔖 ... Tell browsers to cache your CSS/JS
 * 🔑 ... CORS headers
 
+
+**Efficient**: We run one Apache process, no matter how many static websites you have. (It's easy to package a static website up in a container and send the container off to a container hosting service, but then you end up with one container per static website.)
+
 We run a small Django app to allow you to configure sites and continuous deploys. The app then processes any deploys and sets up SSL certificates and Apache configuration as needed (but public viewers never interact with the app - only with Apache directly).
 
 (Static websites are also sometimes called pre-rendering server-side rendering (SSR) - we support those to!)
