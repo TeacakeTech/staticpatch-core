@@ -34,7 +34,7 @@ su -c "source /home/staticpatch/ve/bin/activate && pip install -r /home/staticpa
 
 # Set up update script
 echo "Set up update script ..."
-su -c "cp /home/staticpatch/code/host/ubuntu2404/update_as_user.sh /home/staticpatch/update_as_user.sh" staticpatch 
+su -c "cp /home/staticpatch/code/host/debian13/update_as_user.sh /home/staticpatch/update_as_user.sh" staticpatch 
 su -c "chmod u+x /home/staticpatch/update_as_user.sh" staticpatch 
 
 # Run the update script - this does migrate, collectstatic, etc
@@ -43,7 +43,7 @@ su -c "/home/staticpatch/update_as_user.sh" staticpatch
 
 # Set up and run Web Server - Gunicorn
 echo "Set up and run Gunicorn..."
-cp /home/staticpatch/code/host/ubuntu2404/web.service /etc/systemd/system/staticpatchweb.service
+cp /home/staticpatch/code/host/debian13/web.service /etc/systemd/system/staticpatchweb.service
 systemctl daemon-reload
 systemctl enable staticpatchweb.service
 systemctl start staticpatchweb.service
@@ -52,31 +52,30 @@ systemctl start staticpatchweb.service
 echo "Set up and run Apache ..."
 mkdir -p /home/staticpatch/webroot
 chown staticpatch:staticpatch /home/staticpatch/webroot 
-cp /home/staticpatch/code/host/ubuntu2404/robots.txt /home/staticpatch/webroot/robots.txt
-cp /home/staticpatch/code/host/ubuntu2404/apache.include.conf /etc/apache2/sites-available/staticpatchapp.include.conf
+cp /home/staticpatch/code/host/debian13/robots.txt /home/staticpatch/webroot/robots.txt
+cp /home/staticpatch/code/host/debian13/apache.include.conf /etc/apache2/sites-available/staticpatchapp.include.conf
 a2ensite staticpatchapp
 systemctl restart apache2.service
 
 # Set up and run Worker
 echo "Set up and run Worker ..."
-su -c "cp /home/staticpatch/code/host/ubuntu2404/run_worker.sh /home/staticpatch/run_worker.sh" staticpatch 
+su -c "cp /home/staticpatch/code/host/debian13/run_worker.sh /home/staticpatch/run_worker.sh" staticpatch 
 su -c "chmod u+x /home/staticpatch/run_worker.sh" staticpatch 
-cp /home/staticpatch/code/host/ubuntu2404/worker.service /etc/systemd/system/staticpatchworker.service
+cp /home/staticpatch/code/host/debian13/worker.service /etc/systemd/system/staticpatchworker.service
 systemctl daemon-reload
 systemctl enable staticpatchworker.service
 systemctl start staticpatchworker.service
 
 # Set up run_manage.py
 echo "Set up handy commands ..."
-cp /home/staticpatch/code/host/ubuntu2404/run_manage.sh /home/staticpatch/run_manage.sh
+cp /home/staticpatch/code/host/debian13/run_manage.sh /home/staticpatch/run_manage.sh
 chown staticpatch:staticpatch /home/staticpatch/run_manage.sh
 chmod u+x /home/staticpatch/run_manage.sh
 
-
 # Set up cron
 echo "Set up cron ..."
-cp /home/staticpatch/code/host/ubuntu2404/cron.service /etc/systemd/system/staticpatchcron.service
-cp /home/staticpatch/code/host/ubuntu2404/cron.timer /etc/systemd/system/staticpatchcron.timer
+cp /home/staticpatch/code/host/debian13/cron.service /etc/systemd/system/staticpatchcron.service
+cp /home/staticpatch/code/host/debian13/cron.timer /etc/systemd/system/staticpatchcron.timer
 systemctl daemon-reload
 systemctl enable staticpatchcron.timer
 systemctl start staticpatchcron.timer

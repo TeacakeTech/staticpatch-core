@@ -1,4 +1,4 @@
-# Install on Ubuntu 24.04 server
+# Install on Debian 13 server
 
 ## Install
 
@@ -7,7 +7,7 @@ As root ...
 Install some dependencies:
 
     apt-get update
-    apt-get install -y apache2 git
+    apt-get install -y git
 
 Create the `staticpatch` user:
 
@@ -15,7 +15,7 @@ Create the `staticpatch` user:
 
 Check out the code into this users home directory:
 
-    su -c "git clone https://github.com/TeacakeTech/staticpatch-core.git /home/staticpatch/code" staticpatch
+    su -c "git clone https://codeberg.org/TeacakeTech/staticpatch_for_linux.git /home/staticpatch/code" staticpatch
 
 Create file /home/staticpatch/env_vars and set and then edit the contents:
 
@@ -40,7 +40,7 @@ Create file /etc/apache2/sites-available/staticpatchapp.conf and set and then ed
 
 Run install.sh direct from code repo:
 
-    /home/staticpatch/code/host/ubuntu2404/install.sh   
+    /home/staticpatch/code/host/debian13/install.sh   
 
 Now run certbot with the domain for the main app:
 
