@@ -11,8 +11,8 @@
 
     <form method="post">
         {% csrf_token %}
-        <div class="button-group">
-            <button type="submit">Delete Build</button>
+        <div class="form-actions">
+            <input type="submit" value="Delete Build">
             <a href="{% url 'admin_site_build_detail' site.slug build.id %}">Cancel</a>
         </div>
     </form>
