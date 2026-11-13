@@ -24,6 +24,7 @@ See `docs` directory.
 | OS           | Python | Apache | Certbot |
 | ----         | ------ | ------ | ------- |
 | Ubuntu 24.04 | 3.12   | 2.4    | 2.9     |
+| Debian 13    | 3.13   | 2.4    | 4.0     |
 
 See `host` directory for more.
 
