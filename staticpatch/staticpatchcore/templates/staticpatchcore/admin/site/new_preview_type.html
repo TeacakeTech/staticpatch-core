@@ -7,24 +7,11 @@
     <form method="post">
         {% csrf_token %}
         <table>
-            {% for field in form %}
-            <tr>
-                <th>{{ field.label_tag }}</th>
-                <td>
-                    {{ field }}
-                    {% if field.help_text %}
-                        <div class="help-text">{{ field.help_text }}</div>
-                    {% endif %}
-                    {% if field.errors %}
-                        <div class="error">{{ field.errors }}</div>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
+            {{ form.as_table }}
         </table>
         <div class="form-actions">
-            <button type="submit">Create Preview Type</button>
+            <input type="submit" value="Create Preview Type">
             <a href="{% url 'admin_site_detail' site.slug %}" class="button">Cancel</a>
         </div>
     </form>
-{% endblock %} 
+{% endblock %}

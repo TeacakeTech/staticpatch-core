@@ -9,9 +9,9 @@
         <table>
             {{ form.as_table }}
         </table>
-        <p>
+        <div class="form-actions">
             <input type="submit" value="Save">
             <a href="{% url 'admin_site_detail' site.slug %}" class="button">Cancel</a>
-        </p>
+        </div>
     </form>
-{% endblock %} 
+{% endblock %}

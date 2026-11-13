@@ -52,6 +52,15 @@ class NewSiteSecurityKeyForm(forms.ModelForm):
         return instance
 
 
+class EditSiteSecurityKeyForm(forms.ModelForm):
+    class Meta:
+        model = SiteSecurityKeyModel
+        fields = ["active", "notes"]
+        widgets = {
+            "notes": forms.Textarea(attrs={"rows": 4}),
+        }
+
+
 class NewSitePreviewTypeForm(forms.ModelForm):
     class Meta:
         model = SitePreviewTypeModel

@@ -11,8 +11,8 @@
             {{ form.as_table }}
         </table>
         <div class="form-actions">
-            <button type="submit" class="button">Save Changes</button>
+            <input type="submit" value="Save Changes">
             <a href="{% url 'admin_site_detail' site.slug %}" class="button">Cancel</a>
         </div>
     </form>
-{% endblock %} 
+{% endblock %}

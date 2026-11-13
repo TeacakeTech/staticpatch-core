@@ -10,6 +10,7 @@ from .forms import (
     EditSiteAlternativeDomainForm,
     EditSiteForm,
     EditSitePreviewTypeForm,
+    EditSiteSecurityKeyForm,
     NewBasicAuthUserForm,
     NewSiteAlternativeDomainForm,
     NewSiteForm,
@@ -166,18 +167,21 @@ def admin_site_security_key_edit(request, site_slug, security_key):
     )
 
     if request.method == "POST":
-        security_key_obj.active = request.POST.get("active") == "on"
-        security_key_obj.notes = request.POST.get("notes", "")
-        security_key_obj.save()
-        messages.success(request, "Security key updated successfully")
-        return redirect("admin_site_detail", site_slug=site.slug)
-
+        form = EditSiteSecurityKeyForm(request.POST, instance=security_key_obj)
+        if form.is_valid():
+            preview_type = form.save(commit=False)
+            preview_type.save()
+            messages.success(request, "Security key updated successfully.")
+            return redirect("admin_site_detail", site_slug=site.slug)
+    else:
+        form = EditSiteSecurityKeyForm(instance=security_key_obj)
     return render(
         request,
         "staticpatchcore/admin/site/securitykey/edit.html",
         {
             "site": site,
             "security_key": security_key_obj,
+            "form": form,
         },
     )
 
