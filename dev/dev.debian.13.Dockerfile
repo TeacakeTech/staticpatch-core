@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM debian:13
 
 # Install Software
 RUN apt-get update

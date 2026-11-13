@@ -20,41 +20,33 @@ Add to /etc/hosts
 To setup (run from root directory of repostiory, not the `dev` directory):
 
 ```
-docker build --tag staticpatchdevubuntu2404 -f dev/dev.ubuntu.2404.Dockerfile .
-docker run -d --name staticpatchdevubuntu2404 -p 80:80 -p 443:443  -p 8888:8888 -v .:/home/staticpatch/code staticpatchdevubuntu2404
+docker build --tag staticpatchdevdebian13 -f dev/dev.debian.13.Dockerfile .
+docker run -d --name staticpatchdevdebian13 -p 80:80 -p 443:443  -p 8888:8888 -v .:/home/staticpatch/code staticpatchdevdebian13
 ```
 
 If already setup, start:
 
 ```
-docker start staticpatchdevubuntu2404
+docker start staticpatchdevdebian13
 ```
 
 To connect into the container as root user (sometimes needed):
 
 ```
-docker exec -it -u 0 staticpatchdevubuntu2404 /bin/bash
+docker exec -it -u 0 staticpatchdevdebian13 /bin/bash
 ```
 
 To connect into the container as normal user:
 
 ```
-docker exec -it -u 2000 staticpatchdevubuntu2404 /bin/bash
+docker exec -it -u 2000 staticpatchdevdebian13 /bin/bash
 ```
 
 To stop:
 
 ```
-docker stop staticpatchdevubuntu2404
+docker stop staticpatchdevdebian13
 ```
-
-## Dev Container
-
-You can also use a dev container.
-
-Normally you will be connected as the staticpatch user, but you can run `sudo /bin/bash` to become root.
-
-With this option you can view the admin site, but there may be issues viewing the static sites.
 
 ## To use
 
