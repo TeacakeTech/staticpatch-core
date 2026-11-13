@@ -52,10 +52,10 @@ docker stop staticpatchdevdebian13
 
 The domains listed above all have self-signed SSL certificates set up, so you can use them and test the response.
 
-To setup, open one connection to the container as normal user (or open a terminal if in dev containers) and run:
+To setup, open one connection to the container as normal user and run:
 
 ```
-cd staticpatch/
+cd ~/code/staticpatch/
 STATICPATCH_FILE_STORAGE=/home/staticpatch/storage python3 manage.py migrate
 STATICPATCH_FILE_STORAGE=/home/staticpatch/storage python3 manage.py setupstorage
 STATICPATCH_FILE_STORAGE=/home/staticpatch/storage python3 manage.py createsuperuser
@@ -65,14 +65,14 @@ To run after setup, as normal user open a connection / open a terminal and run:
 
 ```
 sudo apachectl start
-cd staticpatch/
+cd ~/code/staticpatch/
 STATICPATCH_FILE_STORAGE=/home/staticpatch/storage python3 manage.py runserver 0.0.0.0:8888
 ```
 
 Then as normal user open another connection / open another terminal and run:
 
 ```
-cd staticpatch/
+cd ~/code/staticpatch/
 STATICPATCH_FILE_STORAGE=/home/staticpatch/storage python3 manage.py db_worker
 ```
 
@@ -81,4 +81,16 @@ To send a site to this:
 curl -X POST "http://localhost:8888/api/site/SITE/publish_built_site"  -H  "Content-Type: multipart/form-data" -H "Security-Key: your_security_key_here" -F "built_site=@\"dev/test_site.zip\""
 curl -X POST "http://localhost:8888/api/site/SITE/preview/PREVIEW/instance/INSTANCE/publish_built_site"  -H  "Content-Type: multipart/form-data" -H "Security-Key: your_security_key_here" -F "built_site=@\"dev/test_site.zip\""
 curl -X POST "http://localhost:8888/api/site/SITE/preview/PREVIEW/instance/INSTANCE/deactivate"  -H "Security-Key: your_security_key_here"
+```
+
+## To lint & test
+
+To setup, open one connection to the container as normal user and run:
+
+```
+cd ~/code/staticpatch/
+black
+isort .
+flake8
+python3 manage.py test
 ```

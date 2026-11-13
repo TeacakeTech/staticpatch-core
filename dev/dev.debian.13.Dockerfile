@@ -26,12 +26,12 @@ COPY dev/self-signed-cert.pem /etc/apache2/ssl/self-signed-cert.pem
 COPY dev/self-signed-key.pem /etc/apache2/ssl/self-signed-key.pem
 
 # Create dirs for storage and code
-RUN mkdir -p /home/staticpatch/code
-RUN mkdir -p /home/staticpatch/storage/apache-conf
-RUN touch /home/staticpatch/storage/apache-conf/staticpatch.conf
-RUN ln -s /home/staticpatch/storage/apache-conf/staticpatch.conf /etc/apache2/sites-enabled/staticpatch.conf
-RUN chown -R staticpatch:staticpatch /home/staticpatch/storage
-RUN chmod a+rx /home/staticpatch/
+RUN mkdir -p /home/$USERNAME/code
+RUN mkdir -p /home/$USERNAME/storage/apache-conf
+RUN touch /home/$USERNAME/storage/apache-conf/staticpatch.conf
+RUN ln -s /home/$USERNAME/storage/apache-conf/staticpatch.conf /etc/apache2/sites-enabled/staticpatch.conf
+RUN chown -R $USERNAME:$USERNAME /home/$USERNAME/storage
+RUN chmod a+rx /home/$USERNAME/
 
 # Set options
 WORKDIR /home/staticpatch/code

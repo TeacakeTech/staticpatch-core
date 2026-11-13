@@ -8,8 +8,7 @@ class TestCertBotCase(TestCase):
     def test_1(self):
         certbot = Certbot()
         assert (
-            certbot._parse_certbot_certificates_output(
-                """Saving debug log to /var/log/letsencrypt/letsencrypt.log
+            certbot._parse_certbot_certificates_output("""Saving debug log to /var/log/letsencrypt/letsencrypt.log
 
             - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             Found the following certs:
@@ -25,8 +24,7 @@ class TestCertBotCase(TestCase):
             Certificate Path: /etc/letsencrypt/live/cats.com/fullchain.pem
             Private Key Path: /etc/letsencrypt/live/cats.com/privkey.pem
 
-        """
-            )
+        """)
             == {
                 "example.com": {
                     "Expiry Date": "2024-01-01",
@@ -45,14 +43,9 @@ class TestCertBotCase(TestCase):
 
     def test_2(self):
         certbot = Certbot()
-        assert (
-            certbot._parse_certbot_certificates_output(
-                """Saving debug log to /var/log/letsencrypt/letsencrypt.log
+        assert certbot._parse_certbot_certificates_output("""Saving debug log to /var/log/letsencrypt/letsencrypt.log
 
             - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             No certificates found.
             - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            """
-            )
-            == {}
-        )
+            """) == {}

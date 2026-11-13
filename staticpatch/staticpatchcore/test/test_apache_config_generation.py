@@ -39,9 +39,7 @@ class TestApacheConfigCase(TestCase):
                 </Directory>
                 BOILERPLATE
             </VirtualHost>
-            """.format(
-            siteid=site.id, buildid=build.id, filestorage="file_storage"
-        )
+            """.format(siteid=site.id, buildid=build.id, filestorage="file_storage")
 
         self.assertEqual(
             [i.strip() for i in expected.split("\n") if i.strip()],
@@ -114,9 +112,7 @@ class TestApacheConfigCase(TestCase):
                 </Directory>
                 BOILERPLATE
             </VirtualHost>
-            """.format(
-            filestorage="file_storage"
-        )
+            """.format(filestorage="file_storage")
 
         self.assertEqual(
             [i.strip() for i in expected.split("\n") if i.strip()],

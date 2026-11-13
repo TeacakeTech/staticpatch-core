@@ -31,13 +31,13 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('active', models.BooleanField(default=True)),
                 ('deleted_at', models.DateTimeField(null=True)),
-                ('site', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='staticpatchcore.sitemodel')),
+                ('site', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='staticpatchcore.sitemodel')), # noqa
             ],
         ),
         migrations.AddField(
             model_name='buildmodel',
             name='sub_site',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='staticpatchcore.subsitemodel'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='staticpatchcore.subsitemodel'), # noqa
         ),
         migrations.AddConstraint(
             model_name='subsitemodel',

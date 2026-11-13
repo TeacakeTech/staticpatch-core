@@ -2,7 +2,7 @@ import datetime
 import os
 import zipfile
 
-from django_tasks import task
+from django.tasks import task
 
 import staticpatchcore.models
 import staticpatchcore.update_server_config

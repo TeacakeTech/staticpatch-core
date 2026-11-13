@@ -57,8 +57,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_tasks",
-    "django_tasks.backends.database",
+    "django_tasks_db",
     "staticpatchcore",
 ]
 
@@ -148,12 +147,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 PURGE_DELETED_AFTER_SECONDS = env("STATICPATCH_PURGE_DELETED_AFTER_SECONDS")
 
-TASKS = {
-    "default": {
-        # "BACKEND": "django_tasks.backends.immediate.ImmediateBackend" # TODO for testing
-        "BACKEND": "django_tasks.backends.database.DatabaseBackend"
-    }
-}
+TASKS = {"default": {"BACKEND": "django_tasks_db.DatabaseBackend", "QUEUES": ["default"]}}
 
 FILE_STORAGE = env("STATICPATCH_FILE_STORAGE")
 
