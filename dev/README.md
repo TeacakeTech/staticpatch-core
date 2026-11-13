@@ -20,7 +20,7 @@ Add to /etc/hosts
 To setup (run from root directory of repostiory, not the `dev` directory):
 
 ```
-docker build --tag staticpatchdevdebian13 -f dev/dev.debian.13.Dockerfile .
+docker build --tag staticpatchdevdebian13 -f dev/dev.debian.13.Dockerfile --build-arg  USER_ID=`id -u` .
 docker run -d --name staticpatchdevdebian13 -p 80:80 -p 443:443  -p 8888:8888 -v .:/home/staticpatch/code staticpatchdevdebian13
 ```
 
@@ -39,7 +39,7 @@ docker exec -it -u 0 staticpatchdevdebian13 /bin/bash
 To connect into the container as normal user:
 
 ```
-docker exec -it -u 2000 staticpatchdevdebian13 /bin/bash
+docker exec -it -u `id -u` staticpatchdevdebian13 /bin/bash
 ```
 
 To stop:

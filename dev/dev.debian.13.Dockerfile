@@ -1,16 +1,20 @@
 FROM debian:13
 
+ARG USERNAME=staticpatch
+ARG USER_ID=1000
+ARG USER_GROUP_ID=$USER_ID
+
 # Install Software
 RUN apt-get update
 RUN apt-get install -y python3 python3-virtualenv python3-pip apache2 sudo vim less git
 RUN a2enmod ssl
 
 # Create user
-RUN addgroup --gid 2000 staticpatch
-RUN adduser --uid 2000 --gid 2000 --gecos "" --disabled-password staticpatch
+RUN addgroup --gid $USER_GROUP_ID $USERNAME
+RUN adduser --uid $USER_ID --gid $USER_GROUP_ID --gecos "" --disabled-password $USERNAME
 
 # Give user Sudo rights
-RUN echo "staticpatch ALL=(ALL) NOPASSWD: /usr/sbin/apachectl,/usr/bin/certbot,/bin/bash" > /etc/sudoers.d/staticpatch
+RUN echo "$USERNAME ALL=(ALL) NOPASSWD: /usr/sbin/apachectl,/usr/bin/certbot,/bin/bash" > /etc/sudoers.d/staticpatch
 
 # Set up fake certbot
 RUN mkdir -p /etc/letsencrypt
@@ -31,11 +35,11 @@ RUN chmod a+rx /home/staticpatch/
 
 # Set options
 WORKDIR /home/staticpatch/code
-USER staticpatch:staticpatch
+USER $USERNAME:$USERNAME
 
 # Python Deps
 COPY requirements_dev.txt .
-RUN /bin/bash -c "echo \"export PATH=\$PATH:/home/staticpatch/.local/bin/\" >> /home/staticpatch/.bashrc"
+RUN /bin/bash -c "echo \"export PATH=\$PATH:/home/staticpatch/.local/bin/\" >> /home/$USERNAME/.bashrc"
 RUN python3 -m pip config set global.break-system-packages true
 RUN pip install --user -r requirements_dev.txt
 
